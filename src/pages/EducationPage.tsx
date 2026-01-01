@@ -102,16 +102,17 @@ const EducationPage = () => {
       ],
     },
     {
-      category: "Research Guidance",
-      items: [
-        "Guided 6 PhDs",
-        "Eight Scholars are currently working for PhD",
-        "Organized 32 Workshops/Conferences",
-        "Attended 58 Workshops/Conferences",
-        "Session Chaired: 5",
-        "Delivered 32 Invited Talks",
-      ],
-    },
+  category: "Research Guidance (Ph.D. Awarded)",
+  items: [
+    "Guided 6 PhDs & Eight Scholars are currently working for PhD",
+    "RVS Lalitha (Roll No. 09022P0544) – Ph.D. thesis titled “Vehicular Ad Hoc Networks: Pile-ups in Data Dissemination”, awarded in March 2017 under the Department of CSE, JNTUK, Kakinada.",
+    "Mrs. P. Aruna Kumari (Roll No. 3022P0506) – Ph.D. thesis titled “Design and Development of Efficient Feature Selection Mechanisms at Feature Level in Multimodal Biometric System for Person Identification”, awarded in November 2020 under the Department of CSE, JNTUK, Kakinada.",
+    "Ms. S. Sureka (Roll No. 13022P0507) – Ph.D. thesis titled “A Machine Learning Framework for Early Risk Prediction of Diabetes Comorbidity in Thyroid Patients”, awarded in July 2021 under the Department of CSE, JNTUK, Kakinada.",
+    "Ms. N. Jayalakshmi (Roll No. 13022P0604) – Awarded Ph.D. in Computer Science for the thesis titled “An Interesting Subgraph Mining Approach to Design a Web Page Recommendation System using Web Log Data”, on 18th October 2021 under the Department of CSE, JNTUK, Kakinada.",
+    "Mrs. Kovvuri N. Bhargavi (Roll No. 15022P0516) – Awarded Ph.D. in Computer Science and Engineering for the thesis titled “A Framework for Decision Making in Weather Prediction Using Artificial Intelligence”, on 17th July 2023 under the Department of CSE, JNTUK, Kakinada.",
+    "Mrs. Gorli L. Aruna Kumari (Roll No. 13022P0605) – Awarded Ph.D. in Computer Science for the thesis titled “Design and Analysis of an Improved Diabetes Mellitus Prediction Using Deep Neural Network”, on 26th July 2023 under the Department of CSE, JNTUK, Kakinada."
+  ],
+},
   ];
 
   const administrationContributions = [
@@ -173,14 +174,17 @@ const EducationPage = () => {
 
   const professionalContributions = [
     {
-      category: "Professional Memberships",
-      items: [
-        "Member of CSI (ID – 01170956)",
-        "Member of ISTE (ID – LM44520)",
-        "Faculty sponsor of IEEE WIE",
-        "Faculty sponsor of ACM Chapter",
-      ],
-    },
+  category: "Professional Memberships",
+  items: [
+    "Member of Computer Society of India (CSI) – ID: 01170956",
+    "Senior Fellow of IEEE – Membership ID: 92245858",
+    "Life Member of Indian Society for Technical Education (ISTE) – ID: LM44520",
+    "Faculty Sponsor of IEEE Women in Engineering (WIE)",
+    "Faculty Sponsor of ACM Chapter",
+    "Fellow Member of The Institution of Engineers (India)",
+  ],
+}
+,
     {
       category: "International Engagement",
       items: [
@@ -188,12 +192,20 @@ const EducationPage = () => {
         "Visited Malaysia (2016) to present research papers and chair technical sessions",
       ],
     },
-    {
-      category: "Book Publications",
-      items: [
-        "Author of a book titled 'ARTIFICIAL INTELLIGENCE & MACHINE LEARNING' Published by GCS Publishers India - 2022",
-      ],
-    },
+   {
+  category: "Book Publications",
+  items: [
+    "Author of a book titled 'Artificial Intelligence & Machine Learning' – Published by GCS Publishers India, 2022",
+
+    "FGANN: A Hybrid Approach for Medical Diagnosing – International Conference on Computational Intelligence and Big Data Analytics, Springer, December 2018",
+
+    "Swarm Intelligence and Variable Precision Rough Set Model: A Hybrid Approach for Classification – Computational Intelligence Techniques in Health Care, Springer Briefs in Applied Sciences and Technology, 2016",
+
+    "A Comparative Study of Various Minutiae Extraction Methods for Fingerprint Recognition Based on Score Level Fusion – Application of Computational Intelligence to Biology, Springer Briefs in Applied Sciences and Technology, 2016",
+
+    "Vehicular Ad Hoc Networks: Trimming Pile-Ups in Data Dissemination Using HTPVANET Algorithm – Springer India, 2016"
+  ],
+},
   ];
 
   return (

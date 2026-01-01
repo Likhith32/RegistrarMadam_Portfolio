@@ -53,7 +53,7 @@ const ContactPage = () => {
       icon: MapPin,
       title: "Office Address",
       content: [
-        "Office of the Registrar",
+        " Registrar Office",
         "JNTU-GV (Jawaharlal Nehru Technological University - Gurajada Vizianagaram)",
         "Dwarapudi, Vizianagaram",
         "Andhra Pradesh 535003, India",
@@ -67,7 +67,7 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: "Phone",
-      content: ["+91 88973 44078"],
+      content: ["+91 08922294316"],
     },
     {
       icon: Clock,

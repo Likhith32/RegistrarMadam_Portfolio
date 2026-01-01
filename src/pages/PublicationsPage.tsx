@@ -4,7 +4,6 @@ import { Footer } from "@/components/layout/Footer";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { PublicationCard } from "@/components/ui/publication-card";
 import { Button } from "@/components/ui/button";
-import { internationalConferences } from "@/data/publicationsData";
 import { BookOpen, Users, Award } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -14,6 +13,7 @@ const PublicationsPage = () => {
   
   // State for Supabase data
   const [journals, setJournals] = useState<any[]>([]);
+  const [internationalConferences, setInternationalConferences] = useState<any[]>([]);
   const [invitedTalks, setInvitedTalks] = useState<any[]>([]);
   const [workshopsAttended, setWorkshopsAttended] = useState<string[]>([]);
   const [workshopsOrganized, setWorkshopsOrganized] = useState<string[]>([]);
@@ -23,32 +23,41 @@ const PublicationsPage = () => {
     const fetchPublicationsData = async () => {
       setIsLoading(true);
 
-      // Fetch journals
+      // Fetch journals - NOW WITH year FIELD
       const { data: journalsData, error: journalsError } = await supabase
         .from("journals")
-        .select("title, journal, authors, details, link")
-        .order("created_at", { ascending: false });
+        .select("title, journal, authors, year, link")
+        .order("year", { ascending: false, nullsFirst: false });
 
-      // Fetch invited talks
+      // Fetch international conferences - SORTED BY YEAR
+      const { data: conferencesData, error: conferencesError } = await supabase
+        .from("international_conferences")
+        .select("title, authors, venue, year, link")
+        .order("year", { ascending: false });
+
+      // Fetch invited talks - sorted by sort_year
       const { data: talksData, error: talksError } = await supabase
-        .from("invited_talks")
-        .select("title, event, date, speaker")
-        .order("created_at", { ascending: false });
+        .from("invited_talks_sorted")
+        .select("title, event, date, speaker, sort_year")
+        .order("sort_year", { ascending: false });
 
       // Fetch workshops attended
       const { data: attendedData, error: attendedError } = await supabase
         .from("workshops_attended")
         .select("description, year")
-        .order("year", { ascending: false });
+        .order("year", { ascending: false, nullsFirst: false });
 
       // Fetch workshops organized
       const { data: organizedData, error: organizedError } = await supabase
         .from("workshops_organized")
         .select("description, year")
-        .order("year", { ascending: false });
+        .order("year", { ascending: false, nullsFirst: false });
 
       if (journalsError) {
         console.error("Journals Supabase error:", journalsError);
+      }
+      if (conferencesError) {
+        console.error("International Conferences Supabase error:", conferencesError);
       }
       if (talksError) {
         console.error("Invited Talks Supabase error:", talksError);
@@ -61,11 +70,13 @@ const PublicationsPage = () => {
       }
 
       console.log("Journals Data:", journalsData);
+      console.log("International Conferences Data:", conferencesData);
       console.log("Invited Talks Data:", talksData);
       console.log("Workshops Attended Data:", attendedData);
       console.log("Workshops Organized Data:", organizedData);
 
       setJournals(journalsData || []);
+      setInternationalConferences(conferencesData || []);
       setInvitedTalks(talksData || []);
       
       // Transform workshops data to strings with year if available
@@ -86,12 +97,12 @@ const PublicationsPage = () => {
     fetchPublicationsData();
   }, []);
 
-  // Transform data to match PublicationCard interface
+  // Transform data to match PublicationCard interface and sort by year (newest first)
   const allPublications = [
     ...journals.map(j => ({
       title: j.title,
       journal: j.journal,
-      year: j.details?.match(/\d{4}/)?.[0] || "",
+      year: j.year?.toString() || "",
       type: "journal" as const,
       authors: j.authors,
       link: j.link,
@@ -99,7 +110,7 @@ const PublicationsPage = () => {
     ...internationalConferences.map(c => ({
       title: c.title,
       journal: c.venue,
-      year: c.year,
+      year: c.year?.toString() || "",
       type: "conference" as const,
       authors: c.authors,
       link: c.link,
@@ -107,11 +118,17 @@ const PublicationsPage = () => {
     ...invitedTalks.map(t => ({
       title: t.title,
       journal: t.event,
-      year: t.date || "",
+      year: t.sort_year?.toString() || t.date || "",
       type: "talk" as const,
       authors: t.speaker || "Jaya G. Suma",
     })),
-  ];
+  ].sort((a, b) => {
+    // Extract year numbers for comparison
+    const yearA = parseInt(a.year) || 0;
+    const yearB = parseInt(b.year) || 0;
+    // Sort in descending order (newest first: 2025, 2024, 2023, etc.)
+    return yearB - yearA;
+  });
 
   const filteredPublications =
     activeFilter === "all"

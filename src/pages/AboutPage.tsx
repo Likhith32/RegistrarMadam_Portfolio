@@ -54,7 +54,7 @@ const AboutPage = () => {
         <div className="container-wide px-6 lg:px-12 text-center relative z-10">
           {/* Main Title with Fade-In Animation */}
           <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 tracking-tight animate-in fade-in slide-in-from-bottom-4 duration-700">
-            About Dr. G. Jayasuma
+            About Dr. G. Jaya Suma
           </h1>
 
           {/* Gold Accent Underline */}

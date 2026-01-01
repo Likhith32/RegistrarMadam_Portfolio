@@ -2,6 +2,7 @@ import { ReactNode, useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { Newspaper } from "lucide-react";
 import {
   Home,
   Award,
@@ -26,6 +27,7 @@ const navItems = [
   { label: "Committee Roles", to: "/admin/committee-roles", icon: Users },
   { label: "Invited Talks", to: "/admin/invited-talks", icon: Mic },
   { label: "Workshops", to: "/admin/workshops-attended", icon: Calendar },
+  { label: "Media", to: "/admin/media", icon: Newspaper },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {

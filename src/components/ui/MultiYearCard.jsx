@@ -27,6 +27,8 @@ const MultiYearCard = ({
   const [open, setOpen] = useState(false);
   const cardRef = useRef(null);
   const hasYears = Array.isArray(years) && years.length > 0;
+  const hasMultipleYears = Array.isArray(years) && years.length > 1;
+  const singleYear = hasYears && !hasMultipleYears ? years[0] : null;
 
   // Auto-scroll to expanded card on mobile
   useEffect(() => {
@@ -49,7 +51,7 @@ const MultiYearCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={hasMultipleYears ? { scale: 0.98 } : undefined}
       transition={{
         layout: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
         default: { duration: 0.5, ease: "easeOut" },
@@ -59,7 +61,7 @@ const MultiYearCard = ({
         "min-h-[240px] sm:min-h-[260px]",
         "transition-colors duration-300",
         "hover:shadow-lg hover:border-accent/40",
-        "cursor-pointer",
+        hasMultipleYears && "cursor-pointer",
         open
           ? "border-accent bg-accent/5 shadow-xl"
           : "shadow-sm"
@@ -76,19 +78,26 @@ const MultiYearCard = ({
               {badge}
             </p>
           )}
+          {/* Show single year directly */}
+          {singleYear && (
+            <p className="text-sm text-accent font-medium mt-1">
+              {singleYear}
+            </p>
+          )}
           {institution && (
             <p className="text-sm text-muted-foreground mt-1">
               {institution}
             </p>
           )}
-          {hasYears && (
+          {hasMultipleYears && (
             <p className="text-xs text-muted-foreground/70 mt-2 hidden md:block">
               Click to view timeline
             </p>
           )}
         </div>
         
-        {hasYears && (
+        {/* Only show chevron button if there are multiple years */}
+        {hasMultipleYears && (
           <button
             onClick={() => setOpen(!open)}
             aria-expanded={open}
@@ -126,9 +135,9 @@ const MultiYearCard = ({
         </p>
       )}
 
-      {/* EXPANDABLE YEARS */}
+      {/* EXPANDABLE YEARS - Only show for multiple years */}
       <AnimatePresence>
-        {open && hasYears && (
+        {open && hasMultipleYears && (
           <motion.div
             key="years"
             initial={{ opacity: 0, height: 0 }}

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Toaster } from "@/components/ui/toaster";
@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 // ================= ADMIN COMPONENTS =================
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import AuthCallback from "@/components/auth/AuthCallback";
+
 // ================= ADMIN PAGES =================
 import AdminLogin from "./pages/admin/login";
 import AdminDashboard from "./pages/admin/dashboard";
@@ -29,10 +30,11 @@ import JournalsAdmin from "./pages/admin/journals";
 import InvitedTalksAdmin from "./pages/admin/invited-talks";
 import WorkshopsAttendedAdmin from "./pages/admin/workshops-attended";
 import WorkshopsOrganizedAdmin from "./pages/admin/workshops-organized";
+import AdminMedia from "./pages/admin/media"; // ✅ CORRECT IMPORT
 
 const queryClient = new QueryClient();
 
-const App = () => {
+export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -51,11 +53,15 @@ const App = () => {
             <Route path="/education" element={<EducationPage />} />
             <Route path="/contact" element={<ContactPage />} />
 
-            {/* ================= ADMIN LOGIN (PUBLIC) ================= */}
+            {/* ================= ADMIN LOGIN ================= */}
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/auth/callback" element={<AuthCallback />} />
 
             {/* ================= ADMIN PROTECTED ROUTES ================= */}
             <Route path="/admin" element={<ProtectedRoute />}>
+              {/* Redirect /admin → /admin/dashboard */}
+              <Route index element={<Navigate to="dashboard" replace />} />
+
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="major-awards" element={<MajorAwardsAdmin />} />
               <Route
@@ -76,8 +82,10 @@ const App = () => {
                 path="workshops-organized"
                 element={<WorkshopsOrganizedAdmin />}
               />
+
+              {/* ✅ ADMIN MEDIA ROUTE */}
+              <Route path="media" element={<AdminMedia />} />
             </Route>
-            <Route path="/admin/auth/callback" element={<AuthCallback />} />
 
             {/* ================= FALLBACK ================= */}
             <Route path="*" element={<NotFound />} />
@@ -86,6 +94,4 @@ const App = () => {
       </TooltipProvider>
     </QueryClientProvider>
   );
-};
-
-export default App;
+}

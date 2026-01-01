@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Github } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,10 +11,10 @@ export function Footer() {
           {/* About */}
           <div className="lg:col-span-2">
             <h3 className="font-serif text-2xl font-semibold mb-4">
-              Dr.G.Jayasuma
+              Dr. G. Jaya Suma
             </h3>
             <p className="text-primary-foreground/80 leading-relaxed max-w-md">
-              Senior Registrar with over three decades of distinguished service
+             Registrar with over three decades of distinguished service
               in academic administration, governance, and institutional
               leadership at premier educational institutions.
             </p>
@@ -35,7 +35,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-accent transition-colors"
+                    className="text-primary-foreground/70 hover:text-accent transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -55,9 +55,10 @@ export function Footer() {
                   <br />
                   JNTU-GV Gurajada University
                   <br />
-                  Vizianagaram, India - 535003
+                  Vizianagaram, India – 535003
                 </span>
               </li>
+
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-accent flex-shrink-0" />
                 <a
@@ -67,10 +68,11 @@ export function Footer() {
                   registrar@jntugv.edu.in
                 </a>
               </li>
+
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-accent flex-shrink-0" />
                 <span className="text-primary-foreground/80 text-sm">
-                  +91 11 2345 6789
+                  +91 089222 94316
                 </span>
               </li>
             </ul>
@@ -79,13 +81,37 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-primary-foreground/20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p className="text-primary-foreground/60 text-sm">
-              © {currentYear} Dr.G.Jayasuma. All rights reserved.
+              © {currentYear} Dr. G. Jaya Suma. All rights reserved.
             </p>
+
             <p className="text-primary-foreground/60 text-sm">
-              Office of the Registrar, JNTU-GV GURAJADA UNIVERSITY
+              Office of the Registrar, JNTU-GV Gurajada University
             </p>
+
+            {/* Designer Credit */}
+            <a
+              href="https://github.com/Likhith32"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-2 text-primary-foreground/60 text-sm
+                         transition-all duration-300 hover:text-accent
+                         hover:-translate-y-0.5"
+            >
+              <Github
+                size={16}
+                className="transition-transform duration-300 group-hover:scale-110"
+              />
+              <span>
+                Designed by{" "}
+                <span className="font-medium">Likhith Mankala</span>
+              </span>
+              <span className="ml-1 px-2 py-0.5 rounded-full text-xs
+                               bg-accent/10 text-accent font-medium">
+                
+              </span>
+            </a>
           </div>
         </div>
       </div>

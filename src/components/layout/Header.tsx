@@ -61,10 +61,10 @@ export function Header() {
             aria-label="Go to home page"
           >
             <span className="font-serif text-lg md:text-xl font-semibold text-primary tracking-wide">
-              Dr. G. Jayasuma
+              Dr. G. Jaya Suma
             </span>
             <span className="text-xs md:text-sm text-muted-foreground tracking-wider uppercase">
-              University Registrar
+             Registrar of JNTU-GV
             </span>
           </Link>
 

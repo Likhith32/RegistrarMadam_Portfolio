@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Edit2, Trash2, AlertCircle } from "lucide-react";
+import { Edit2, Trash2, AlertCircle, Eye } from "lucide-react";
 
 interface Column<T> {
   key: keyof T;
   label: string;
+  render?: (value: any, row: T) => React.ReactNode;
 }
 
 interface AdminTableProps<T> {
@@ -11,6 +13,7 @@ interface AdminTableProps<T> {
   data: T[];
   onEdit: (row: T) => void;
   onDelete: (row: T) => void;
+  onView?: (row: T) => void;
   loading?: boolean;
 }
 
@@ -19,8 +22,11 @@ export default function AdminTable<T extends { id: string }>({
   data,
   onEdit,
   onDelete,
+  onView,
   loading = false,
 }: AdminTableProps<T>) {
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   if (loading) {
     return (
       <div style={styles.wrapper}>
@@ -32,11 +38,27 @@ export default function AdminTable<T extends { id: string }>({
     );
   }
 
+  const handleDeleteClick = (row: T) => {
+    if (deleteId === row.id) {
+      // Confirm delete
+      onDelete(row);
+      setDeleteId(null);
+    } else {
+      // Show confirmation
+      setDeleteId(row.id);
+    }
+  };
+
+  const handleCancelDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDeleteId(null);
+  };
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.tableContainer}>
         <table style={styles.table}>
-          <thead>
+          <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
             <tr>
               {columns.map((col, index) => (
                 <motion.th
@@ -94,33 +116,113 @@ export default function AdminTable<T extends { id: string }>({
                       >
                         <span className="mobile-label">{col.label}:</span>
                         <span className="cell-content">
-                          {String(row[col.key] ?? "")}
+                          {col.render
+                            ? col.render(row[col.key], row)
+                            : String(row[col.key] ?? "")}
                         </span>
                       </td>
                     ))}
-                    <td style={{ ...styles.td, textAlign: "right" }} data-label="Actions">
-                      <div style={styles.actionButtons}>
-                        <motion.button
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => onEdit(row)}
-                          style={{ ...styles.actionBtn, ...styles.editBtn }}
-                          className="action-btn edit-btn"
-                        >
-                          <Edit2 size={14} />
-                          <span>Edit</span>
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.05, y: -2 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => onDelete(row)}
-                          style={{ ...styles.actionBtn, ...styles.deleteBtn }}
-                          className="action-btn delete-btn"
-                        >
-                          <Trash2 size={14} />
-                          <span>Delete</span>
-                        </motion.button>
-                      </div>
+                    <td
+                      style={{ ...styles.td, textAlign: "right" }}
+                      data-label="Actions"
+                    >
+                      <AnimatePresence mode="wait">
+                        {deleteId === row.id ? (
+                          <motion.div
+                            key="confirm"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            style={styles.confirmContainer}
+                          >
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleDeleteClick(row)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleDeleteClick(row);
+                              }}
+                              tabIndex={0}
+                              style={styles.confirmBtn}
+                              className="confirm-btn"
+                            >
+                              Confirm
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={handleCancelDelete}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleCancelDelete(e as any);
+                              }}
+                              tabIndex={0}
+                              style={styles.cancelBtn}
+                              className="cancel-btn"
+                            >
+                              Cancel
+                            </motion.button>
+                          </motion.div>
+                        ) : (
+                          <motion.div
+                            key="actions"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            style={styles.actionButtons}
+                          >
+                            {onView && (
+                              <motion.button
+                                whileHover={{ scale: 1.05, y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => onView(row)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") onView(row);
+                                }}
+                                tabIndex={0}
+                                style={{
+                                  ...styles.actionBtn,
+                                  ...styles.viewBtn,
+                                }}
+                                className="action-btn view-btn"
+                              >
+                                <Eye size={14} />
+                                <span>View</span>
+                              </motion.button>
+                            )}
+                            <motion.button
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => onEdit(row)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") onEdit(row);
+                              }}
+                              tabIndex={0}
+                              style={{ ...styles.actionBtn, ...styles.editBtn }}
+                              className="action-btn edit-btn"
+                            >
+                              <Edit2 size={14} />
+                              <span>Edit</span>
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => setDeleteId(row.id)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") setDeleteId(row.id);
+                              }}
+                              tabIndex={0}
+                              style={{
+                                ...styles.actionBtn,
+                                ...styles.deleteBtn,
+                              }}
+                              className="action-btn delete-btn"
+                            >
+                              <Trash2 size={14} />
+                              <span>Delete</span>
+                            </motion.button>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </td>
                   </motion.tr>
                 ))
@@ -152,6 +254,7 @@ const styles: Record<string, React.CSSProperties> = {
 
   tableContainer: {
     overflowX: "auto",
+    maxHeight: "70vh",
   },
 
   table: {
@@ -215,6 +318,13 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
   },
 
+  confirmContainer: {
+    display: "flex",
+    gap: "8px",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+
   actionBtn: {
     padding: "8px 16px",
     borderRadius: "10px",
@@ -231,6 +341,12 @@ const styles: Record<string, React.CSSProperties> = {
     backdropFilter: "blur(8px)",
   },
 
+  viewBtn: {
+    background: "linear-gradient(135deg, #60a5fa, #3b82f6)",
+    color: "#fff",
+    boxShadow: "0 8px 20px rgba(59,130,246,0.4)",
+  },
+
   editBtn: {
     background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
     color: "#78350f",
@@ -241,6 +357,32 @@ const styles: Record<string, React.CSSProperties> = {
     background: "linear-gradient(135deg, #ef4444, #dc2626)",
     color: "#fff",
     boxShadow: "0 8px 20px rgba(239,68,68,0.4)",
+  },
+
+  confirmBtn: {
+    padding: "6px 16px",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "12px",
+    fontWeight: 700,
+    background: "linear-gradient(135deg, #ef4444, #dc2626)",
+    color: "#fff",
+    boxShadow: "0 6px 16px rgba(239,68,68,0.5)",
+    transition: "all 0.3s ease",
+  },
+
+  cancelBtn: {
+    padding: "6px 16px",
+    borderRadius: "8px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "12px",
+    fontWeight: 700,
+    background: "rgba(255,255,255,0.7)",
+    color: "#3b2f0b",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    transition: "all 0.3s ease",
   },
 
   loadingContainer: {
@@ -321,6 +463,10 @@ const keyframes = `
 }
 
 /* Button hover effects */
+.view-btn:hover {
+  box-shadow: 0 12px 30px rgba(59,130,246,0.5);
+}
+
 .edit-btn:hover {
   box-shadow: 0 12px 30px rgba(251,191,36,0.5);
 }
@@ -329,14 +475,30 @@ const keyframes = `
   box-shadow: 0 12px 30px rgba(239,68,68,0.5);
 }
 
+.confirm-btn:hover {
+  box-shadow: 0 8px 24px rgba(239,68,68,0.6);
+  transform: scale(1.05);
+}
+
+.cancel-btn:hover {
+  background: rgba(255,255,255,0.9);
+  transform: scale(1.05);
+}
+
 /* Focus states for accessibility */
-.action-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(251,191,36,0.5);
+.action-btn:focus,
+.confirm-btn:focus,
+.cancel-btn:focus {
+  outline: 2px solid rgba(251,191,36,0.6);
+  outline-offset: 2px;
 }
 
 .delete-btn:focus {
-  box-shadow: 0 0 0 3px rgba(239,68,68,0.5);
+  outline: 2px solid rgba(239,68,68,0.6);
+}
+
+.view-btn:focus {
+  outline: 2px solid rgba(59,130,246,0.6);
 }
 
 /* Mobile optimization */
@@ -391,12 +553,15 @@ const keyframes = `
     margin-left: 12px;
   }
 
-  .action-buttons {
+  .action-buttons,
+  .confirm-container {
     width: 100%;
     justify-content: stretch !important;
   }
 
-  .action-btn {
+  .action-btn,
+  .confirm-btn,
+  .cancel-btn {
     flex: 1;
   }
 }
@@ -409,6 +574,11 @@ const keyframes = `
   .action-btn {
     padding: 10px 12px;
     justify-content: center;
+  }
+
+  .confirm-btn,
+  .cancel-btn {
+    padding: 8px 12px;
   }
 }
 

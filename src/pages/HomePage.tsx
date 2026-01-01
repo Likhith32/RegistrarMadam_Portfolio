@@ -51,18 +51,18 @@ const HomePage = () => {
             <div className="animate-slide-up">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 text-accent rounded-sm mb-6">
                 <span className="text-sm font-medium tracking-wider uppercase">
-                  University Registrar
+                  Registrar
                 </span>
               </div>
 
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight mb-6">
-                Dr. G.JayaSuma
+                Dr. G.Jaya Suma
                 <br />
                 <span className="text-secondary"></span>
               </h1>
 
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-xl">
-                Senior Administrative Officer with over three decades of
+                Administrative Officer with Nearly three decades of
                 distinguished service in academic governance, institutional
                 leadership, and educational excellence.
               </p>

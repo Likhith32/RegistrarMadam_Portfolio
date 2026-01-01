@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Newspaper } from "lucide-react";
+
 import {
   Award,
   BookOpen,
@@ -39,6 +41,14 @@ const sections = [
     bgGradient: "from-pink-400/20 to-rose-400/20",
     count: null
   },
+  {
+  title: "Media",
+  path: "/admin/media",
+  icon: Newspaper,
+  color: "text-blue-600",
+  bgGradient: "from-blue-400/20 to-sky-400/20",
+  count: null
+},
   { 
     title: "Journals", 
     path: "/admin/journals", 
