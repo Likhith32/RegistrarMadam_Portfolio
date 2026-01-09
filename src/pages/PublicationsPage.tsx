@@ -7,6 +7,13 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Award } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+// JSON fallback imports
+import journalsJSON from "@/data/journals.json";
+import internationalConferencesJSON from "@/data/international_conferences.json";
+import invitedTalksJSON from "@/data/invited_talks.json";
+import workshopsAttendedJSON from "@/data/workshops_attended.json";
+import workshopsOrganizedJSON from "@/data/workshops_organized.json";
+
 const PublicationsPage = () => {
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
@@ -18,84 +25,106 @@ const PublicationsPage = () => {
   const [workshopsAttended, setWorkshopsAttended] = useState<string[]>([]);
   const [workshopsOrganized, setWorkshopsOrganized] = useState<string[]>([]);
 
-  // Fetch data from Supabase
+  // Check if Supabase is available (production-safe)
+  const isSupabaseEnabled =
+    !!import.meta.env.VITE_SUPABASE_URL &&
+    !!import.meta.env.VITE_SUPABASE_ANON_KEY &&
+    !!supabase;
+
+  // Fetch data from Supabase with JSON fallback
   useEffect(() => {
     const fetchPublicationsData = async () => {
       setIsLoading(true);
 
-      // Fetch journals - NOW WITH year FIELD
-      const { data: journalsData, error: journalsError } = await supabase
-        .from("journals")
-        .select("title, journal, authors, year, link")
-        .order("year", { ascending: false, nullsFirst: false });
+      try {
+        // Check if Supabase is enabled
+        if (!isSupabaseEnabled) {
+          throw new Error("Supabase not configured");
+        }
 
-      // Fetch international conferences - SORTED BY YEAR
-      const { data: conferencesData, error: conferencesError } = await supabase
-        .from("international_conferences")
-        .select("title, authors, venue, year, link")
-        .order("year", { ascending: false });
+        // Fetch journals - WITH year FIELD
+        const { data: journalsData, error: journalsError } = await supabase
+          .from("journals")
+          .select("title, journal, authors, year, link")
+          .order("year", { ascending: false, nullsFirst: false });
+        if (journalsError) throw journalsError;
 
-      // Fetch invited talks - sorted by sort_year
-      const { data: talksData, error: talksError } = await supabase
-        .from("invited_talks_sorted")
-        .select("title, event, date, speaker, sort_year")
-        .order("sort_year", { ascending: false });
+        // Fetch international conferences - SORTED BY YEAR
+        const { data: conferencesData, error: conferencesError } = await supabase
+          .from("international_conferences")
+          .select("title, authors, venue, year, link")
+          .order("year", { ascending: false });
+        if (conferencesError) throw conferencesError;
 
-      // Fetch workshops attended
-      const { data: attendedData, error: attendedError } = await supabase
-        .from("workshops_attended")
-        .select("description, year")
-        .order("year", { ascending: false, nullsFirst: false });
+        // Fetch invited talks - FIXED: using invited_talks (not invited_talks_sorted)
+        const { data: talksData, error: talksError } = await supabase
+          .from("invited_talks")
+          .select("title, event, date, speaker, sort_year, year")
+          .order("sort_year", { ascending: false });
+        if (talksError) throw talksError;
 
-      // Fetch workshops organized
-      const { data: organizedData, error: organizedError } = await supabase
-        .from("workshops_organized")
-        .select("description, year")
-        .order("year", { ascending: false, nullsFirst: false });
+        // Fetch workshops attended
+        const { data: attendedData, error: attendedError } = await supabase
+          .from("workshops_attended")
+          .select("description, year")
+          .order("year", { ascending: false, nullsFirst: false });
+        if (attendedError) throw attendedError;
 
-      if (journalsError) {
-        console.error("Journals Supabase error:", journalsError);
+        // Fetch workshops organized
+        const { data: organizedData, error: organizedError } = await supabase
+          .from("workshops_organized")
+          .select("description, year")
+          .order("year", { ascending: false, nullsFirst: false });
+        if (organizedError) throw organizedError;
+
+        console.log("Journals Data:", journalsData);
+        console.log("International Conferences Data:", conferencesData);
+        console.log("Invited Talks Data:", talksData);
+        console.log("Workshops Attended Data:", attendedData);
+        console.log("Workshops Organized Data:", organizedData);
+
+        // Set state from Supabase
+        setJournals(journalsData || []);
+        setInternationalConferences(conferencesData || []);
+        setInvitedTalks(talksData || []);
+        
+        // Transform workshops data to strings with year if available
+        setWorkshopsAttended(
+          (attendedData || []).map(w => 
+            w.year ? `${w.description} (${w.year})` : w.description
+          )
+        );
+        setWorkshopsOrganized(
+          (organizedData || []).map(w => 
+            w.year ? `${w.description} (${w.year})` : w.description
+          )
+        );
+      } catch (error) {
+        console.warn("Supabase failed → loading publications from JSON");
+
+        // ✅ FALLBACK TO LOCAL JSON
+        setJournals(journalsJSON || []);
+        setInternationalConferences(internationalConferencesJSON || []);
+        setInvitedTalks(invitedTalksJSON || []);
+
+        setWorkshopsAttended(
+          (workshopsAttendedJSON || []).map((w: any) =>
+            w.year ? `${w.description} (${w.year})` : w.description
+          )
+        );
+
+        setWorkshopsOrganized(
+          (workshopsOrganizedJSON || []).map((w: any) =>
+            w.year ? `${w.description} (${w.year})` : w.description
+          )
+        );
+      } finally {
+        setIsLoading(false);
       }
-      if (conferencesError) {
-        console.error("International Conferences Supabase error:", conferencesError);
-      }
-      if (talksError) {
-        console.error("Invited Talks Supabase error:", talksError);
-      }
-      if (attendedError) {
-        console.error("Workshops Attended Supabase error:", attendedError);
-      }
-      if (organizedError) {
-        console.error("Workshops Organized Supabase error:", organizedError);
-      }
-
-      console.log("Journals Data:", journalsData);
-      console.log("International Conferences Data:", conferencesData);
-      console.log("Invited Talks Data:", talksData);
-      console.log("Workshops Attended Data:", attendedData);
-      console.log("Workshops Organized Data:", organizedData);
-
-      setJournals(journalsData || []);
-      setInternationalConferences(conferencesData || []);
-      setInvitedTalks(talksData || []);
-      
-      // Transform workshops data to strings with year if available
-      setWorkshopsAttended(
-        (attendedData || []).map(w => 
-          w.year ? `${w.description} (${w.year})` : w.description
-        )
-      );
-      setWorkshopsOrganized(
-        (organizedData || []).map(w => 
-          w.year ? `${w.description} (${w.year})` : w.description
-        )
-      );
-
-      setIsLoading(false);
     };
 
     fetchPublicationsData();
-  }, []);
+  }, [isSupabaseEnabled]);
 
   // Transform data to match PublicationCard interface and sort by year (newest first)
   const allPublications = [
@@ -118,7 +147,7 @@ const PublicationsPage = () => {
     ...invitedTalks.map(t => ({
       title: t.title,
       journal: t.event,
-      year: t.sort_year?.toString() || t.date || "",
+      year: t.sort_year?.toString() || t.year?.toString() || t.date || "",
       type: "talk" as const,
       authors: t.speaker || "Jaya G. Suma",
     })),
@@ -260,7 +289,7 @@ const PublicationsPage = () => {
           />
 
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Workshops/Seminars Attended - FROM SUPABASE */}
+            {/* Workshops/Seminars Attended - FROM SUPABASE OR JSON */}
             <div className="animate-fade-in-up">
               <h3 className="font-serif text-2xl font-bold text-primary mb-6">
                 Workshops/Seminars Attended
@@ -288,7 +317,7 @@ const PublicationsPage = () => {
               )}
             </div>
 
-            {/* Workshops/Conferences Organized - FROM SUPABASE */}
+            {/* Workshops/Conferences Organized - FROM SUPABASE OR JSON */}
             <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
               <h3 className="font-serif text-2xl font-bold text-primary mb-6">
                 Workshops/Conferences Organized
