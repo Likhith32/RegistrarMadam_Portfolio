@@ -2,7 +2,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Briefcase, Users, Target, Lightbulb } from "lucide-react";
-import RegistrarImage from "../assets/registrar.jpeg";
+import registrarImg from "../assets/Registrar.jpeg";
+
 
 const AboutPage = () => {
   const expertise = [
