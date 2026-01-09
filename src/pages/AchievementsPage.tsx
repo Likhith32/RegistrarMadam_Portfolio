@@ -6,6 +6,11 @@ import MultiYearCard from "@/components/ui/MultiYearCard";
 import { Trophy, Star, Shield, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+// JSON Fallback Imports
+import academicGovernanceJSON from "@/data/academic_governance.json";
+import committeeRolesJSON from "@/data/committee_roles.json";
+import majorAwardsJSON from "@/data/major_awards.json";
+
 interface AchievementItem {
   id: string;
   title: string;
@@ -25,6 +30,9 @@ const AchievementsPage = () => {
   const [loadingAcademic, setLoadingAcademic] = useState(true);
   const [loadingCommittees, setLoadingCommittees] = useState(true);
 
+  // Check if Supabase is available (future-proof)
+  const isSupabaseEnabled = !!supabase;
+
   // Helper function to parse years text into array
   const parseYears = (yearsText: string | null): string[] => {
     if (!yearsText) return [];
@@ -35,11 +43,30 @@ const AchievementsPage = () => {
       .filter(year => year.length > 0);
   };
 
+  // Helper function to format JSON data to UI format (browser-safe ID generation)
+  const formatJsonData = (data: any[]): AchievementItem[] => {
+    return (data || []).map((item) => ({
+      id: item.id ?? `${item.title}-${Math.random()}`,
+      title: item.title,
+      badge: item.badge || "",
+      institution: item.institution,
+      description: item.description || "",
+      years: parseYears(item.years),
+      created_at: item.created_at,
+    }));
+  };
+
   // Fetch Major Awards
   useEffect(() => {
     const fetchAwards = async () => {
+      setLoadingAwards(true);
+
       try {
-        setLoadingAwards(true);
+        // Check if Supabase is enabled
+        if (!isSupabaseEnabled) {
+          throw new Error("Supabase not configured");
+        }
+
         const { data, error } = await supabase
           .from("major_awards")
           .select("*")
@@ -47,32 +74,29 @@ const AchievementsPage = () => {
 
         if (error) throw error;
 
-        const formattedData: AchievementItem[] = (data || []).map(item => ({
-          id: item.id,
-          title: item.title,
-          badge: item.badge || "",
-          institution: item.institution,
-          description: item.description || "",
-          years: parseYears(item.years),
-          created_at: item.created_at
-        }));
-
-        setAwards(formattedData);
+        setAwards(formatJsonData(data));
       } catch (error) {
-        console.error("Error fetching major awards:", error);
+        console.warn("Loading from major_awards.json fallback");
+        setAwards(formatJsonData(majorAwardsJSON));
       } finally {
         setLoadingAwards(false);
       }
     };
 
     fetchAwards();
-  }, []);
+  }, [isSupabaseEnabled]);
 
   // Fetch Academic & Governance
   useEffect(() => {
     const fetchAcademic = async () => {
+      setLoadingAcademic(true);
+
       try {
-        setLoadingAcademic(true);
+        // Check if Supabase is enabled
+        if (!isSupabaseEnabled) {
+          throw new Error("Supabase not configured");
+        }
+
         const { data, error } = await supabase
           .from("academic_governance")
           .select("*")
@@ -80,32 +104,29 @@ const AchievementsPage = () => {
 
         if (error) throw error;
 
-        const formattedData: AchievementItem[] = (data || []).map(item => ({
-          id: item.id,
-          title: item.title,
-          badge: item.badge || "",
-          institution: item.institution,
-          description: item.description || "",
-          years: parseYears(item.years),
-          created_at: item.created_at
-        }));
-
-        setAcademicGovernance(formattedData);
+        setAcademicGovernance(formatJsonData(data));
       } catch (error) {
-        console.error("Error fetching academic governance:", error);
+        console.warn("Loading from academic_governance.json fallback");
+        setAcademicGovernance(formatJsonData(academicGovernanceJSON));
       } finally {
         setLoadingAcademic(false);
       }
     };
 
     fetchAcademic();
-  }, []);
+  }, [isSupabaseEnabled]);
 
   // Fetch Committee Roles
   useEffect(() => {
     const fetchCommittees = async () => {
+      setLoadingCommittees(true);
+
       try {
-        setLoadingCommittees(true);
+        // Check if Supabase is enabled
+        if (!isSupabaseEnabled) {
+          throw new Error("Supabase not configured");
+        }
+
         const { data, error } = await supabase
           .from("committee_roles")
           .select("*")
@@ -113,26 +134,17 @@ const AchievementsPage = () => {
 
         if (error) throw error;
 
-        const formattedData: AchievementItem[] = (data || []).map(item => ({
-          id: item.id,
-          title: item.title,
-          badge: item.badge || "",
-          institution: item.institution,
-          description: item.description || "",
-          years: parseYears(item.years),
-          created_at: item.created_at
-        }));
-
-        setCommittees(formattedData);
+        setCommittees(formatJsonData(data));
       } catch (error) {
-        console.error("Error fetching committee roles:", error);
+        console.warn("Loading from committee_roles.json fallback");
+        setCommittees(formatJsonData(committeeRolesJSON));
       } finally {
         setLoadingCommittees(false);
       }
     };
 
     fetchCommittees();
-  }, []);
+  }, [isSupabaseEnabled]);
 
   // Loading spinner component
   const LoadingSpinner = () => (
