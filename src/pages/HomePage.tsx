@@ -3,7 +3,7 @@ import { ArrowRight, Download, FileText, GraduationCap, Award, BookOpen } from "
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import registrarImg from "../assets/Registrar.jpeg";
+import RegistrarImage from "../assets/Registrar.jpeg";
 
 import CountUp from "react-countup";
 
