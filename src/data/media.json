@@ -1,0 +1,200 @@
+[
+  {
+    "id": "0239d022-c041-4f82-8cdd-d13666cb3be0",
+    "title": "Career Guidance and Future Scope Awareness Program",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Career guidance program highlighting future opportunities and emerging fields.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/FutureScope.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "026ee083-25ec-4a44-bbc5-3b22c8d55943",
+    "title": "Awareness Program on Social Responsibilities and Values",
+    "source": "Mana Vizianagaram / Visalaandhra",
+    "year": 2023,
+    "description": "Awareness program focusing on social responsibilities, ethical values, and community participation.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/RuleAwareness.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "0ed9a8b8-bab5-4012-ad8e-a46e093f488a",
+    "title": "Skill Development Program for Women",
+    "source": "Telugu Daily Newspaper",
+    "year": 2024,
+    "description": "Women empowerment and skill development initiative highlighting training programs and community participation aimed at enhancing livelihood opportunities.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/GirlsSkills.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "2f11debf-1898-4401-8885-04886ac53d8a",
+    "title": "Women Empowerment and Social Awareness Program",
+    "source": "Samaja Telugu Newspaper",
+    "year": 2023,
+    "description": "Social awareness program highlighting women empowerment, leadership, and community development.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Samaja.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "4f65477b-0769-445e-b2ad-8704bee7b547",
+    "title": "Innovative Teaching and Learning Practices Program",
+    "source": "Telugu Daily Newspaper",
+    "year": 2020,
+    "description": "Program focused on innovative teaching methodologies and online learning practices.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Teaching.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "50d8416e-cfbd-4e4f-953e-bf2689f20d85",
+    "title": "Technical Awareness and Innovation Program",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Technical and innovation-focused program conducted to enhance students awareness of emerging technologies.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Sankiethika.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "58445443-0b46-40cc-9045-588a92435b94",
+    "title": "Hands-on Training Program on R Programming",
+    "source": "Sakshi Telugu Newspaper",
+    "year": 2017,
+    "description": "Training programme organized to provide hands-on exposure to R programming.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/RProgram.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "63aa1fd3-366a-4422-8668-14a955af2ef2",
+    "title": "Registrar J.S. Felicitation and Academic Interaction",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Felicitation program honoring the Registrar for academic leadership.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/RegistraRJS.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "6dee4e09-498a-48c5-ba29-a8e0403d83bc",
+    "title": "Self-Defense Awareness Program for Women",
+    "source": "Telugu Daily Newspaper",
+    "year": 2018,
+    "description": "Self-defense awareness program conducted to empower women with safety skills and confidence.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/SelfDefense.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "6f9063fc-3e3d-4c02-a089-aa3916a20005",
+    "title": "Independence Day Celebrations at University Campus",
+    "source": "Telugu Daily Newspaper",
+    "year": 2019,
+    "description": "Independence Day celebrations conducted with flag hoisting and student participation.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Independenceday.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "85aa02cc-24cb-4827-b484-c31d12a25a24",
+    "title": "Online Faculty Development Programme on Data Science",
+    "source": "The Hindu Newspaper",
+    "year": 2020,
+    "description": "Online faculty development programme conducted on data science and its applications.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/OnlineFaculty.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "8ea1fb13-2d99-493f-b055-f787e24db126",
+    "title": "Awards and Recognition for Student Achievements",
+    "source": "Telugu Daily Newspaper",
+    "year": 2019,
+    "description": "Awards ceremony organized to recognize outstanding student achievements.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Awards.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "8f9f832a-2dcc-4b70-8c18-4c115d1bb2a1",
+    "title": "IT Yukta 2K17 – Technical and Innovation Summit",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Technical and innovation summit organized to promote student creativity and excellence.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/ITYukta2k17.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "908504a2-4652-4c39-a633-1b3821fcbddf",
+    "title": "Data Science and Advanced Analytics Awareness Program",
+    "source": "Telugu Daily Newspaper",
+    "year": 2020,
+    "description": "Awareness program conducted on data science, analytics, and emerging digital technologies.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/DataScience.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "92f103d7-0f7a-4bf9-922b-2fdc2ad77b8d",
+    "title": "Legal and Rule Awareness Program for Women",
+    "source": "Visalaandhra Telugu Newspaper",
+    "year": 2023,
+    "description": "Rule awareness program organized to educate women on legal rights, social laws, and safety measures.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Girls.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "9b8d55ea-2269-4af4-989d-f20815865e43",
+    "title": "Education Beyond Textbooks Initiative",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Educational initiative emphasizing holistic learning beyond textbooks.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/NotOnlyBooks.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "a60ac0d9-c78b-40be-8af8-0ff15d5e868c",
+    "title": "DSP Felicitation and Awareness Interaction",
+    "source": "Telugu Daily Newspaper",
+    "year": 2018,
+    "description": "Felicitation program honoring DSP officials with interactive sessions for students.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/DSPFaliciate.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "c2566df9-0624-4596-b936-b4774a3544ce",
+    "title": "JNTV Technical Seminar and Academic Conference",
+    "source": "Telugu Daily Newspaper",
+    "year": 2017,
+    "description": "Academic and technical seminar organized to promote knowledge sharing and student participation.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/JNTVSadassu.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "da5158df-a283-4243-9538-6b5607c479ac",
+    "title": "COVID-19 Awareness and Safety Initiative",
+    "source": "Telugu Daily Newspaper",
+    "year": 2020,
+    "description": "Public awareness initiative conducted to educate citizens on COVID-19 safety measures.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/Covid.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "f4f8e649-e0c5-4c78-a6d5-9bb8b1d53176",
+    "title": "Digital India Awareness Program",
+    "source": "Telugu Daily Newspaper",
+    "year": 2015,
+    "description": "Digital India awareness program organized to promote digital literacy, e-governance initiatives, and technology adoption.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/DigitalIndia.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "f6ca1426-28ab-4c24-8dba-bdd254178c52",
+    "title": "Cyber Intelligence and Security Awareness Seminar",
+    "source": "Telugu Daily Newspaper",
+    "year": 2023,
+    "description": "Cyber intelligence and security awareness seminar focusing on cyber safety and digital threats.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/CyberIntel.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  },
+  {
+    "id": "fa65e0c6-05c8-4906-8412-d3b56b711f72",
+    "title": "Employment Opportunities for Engineering Graduates",
+    "source": "Engg Upadhi (Telugu Newspaper)",
+    "year": 2016,
+    "description": "Awareness program conducted to guide engineering graduates on employment opportunities, career planning, and skill development through seminars.",
+    "image_url": "https://zkiqeyhmoipzqawqqrvv.supabase.co/storage/v1/object/public/media/EnggUpadhi.png",
+    "created_at": "2025-12-29 16:25:15.037243+00"
+  }
+]
