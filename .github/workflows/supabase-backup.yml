@@ -2,7 +2,7 @@ name: Supabase Weekly Backup
 
 on:
   schedule:
-    - cron: "0 4 * * 1"   # Monday 04:00 UTC
+    - cron: "0 4 * * 1"   # Every Monday at 04:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install Supabase CLI
@@ -18,7 +18,7 @@ jobs:
           curl -fsSL https://supabase.com/install/linux | sh
           echo "$HOME/.supabase/bin" >> $GITHUB_PATH
 
-      - name: Authenticate Supabase
+      - name: Login to Supabase
         run: |
           supabase login --token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
@@ -28,7 +28,7 @@ jobs:
             --project-id ${{ secrets.SUPABASE_PROJECT_ID }} \
             --file supabase_backup.sql
 
-      - name: Upload backup
+      - name: Upload backup artifact
         uses: actions/upload-artifact@v4
         with:
           name: supabase-weekly-backup
