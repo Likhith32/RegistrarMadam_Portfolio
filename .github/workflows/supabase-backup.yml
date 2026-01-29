@@ -24,13 +24,15 @@ jobs:
         run: |
           supabase login --token "$SUPABASE_ACCESS_TOKEN"
 
-      - name: Backup Supabase database
+      - name: Link Supabase project
         env:
           SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
         run: |
-          supabase db dump \
-            --project-id "$SUPABASE_PROJECT_ID" \
-            --file supabase_backup.sql
+          supabase link --project-ref "$SUPABASE_PROJECT_ID" --yes
+
+      - name: Dump Supabase database
+        run: |
+          supabase db dump --file supabase_backup.sql
 
       - name: Upload backup artifact
         uses: actions/upload-artifact@v4
