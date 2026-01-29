@@ -13,16 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Supabase CLI (official apt repo)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ca-certificates curl gnupg
-          sudo install -m 0755 -d /etc/apt/keyrings
-          curl -fsSL https://packages.supabase.com/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/supabase.gpg
-          echo "deb [signed-by=/etc/apt/keyrings/supabase.gpg] https://packages.supabase.com/debian stable main" | sudo tee /etc/apt/sources.list.d/supabase.list
-          sudo apt-get update
-          sudo apt-get install -y supabase
-          supabase --version
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
 
       - name: Login to Supabase
         env:
