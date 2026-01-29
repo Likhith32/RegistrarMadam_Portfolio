@@ -10,36 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install PostgreSQL client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client dnsutils
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Resolve Supabase IPv4
-        id: resolve
+      - name: Install Supabase CLI
         run: |
-          IPV4=$(getent ahostsv4 db.zkiqeyhmoipzqawqqrvv.supabase.co | awk '{print $1; exit}')
-          echo "SUPABASE_IPV4=$IPV4" >> $GITHUB_ENV
-          echo "Resolved IPv4: $IPV4"
+          curl -fsSL https://supabase.com/install/linux | sh
+          echo "$HOME/.supabase/bin" >> $GITHUB_PATH
 
-      - name: Create database backup (IPv4 + SSL)
-        env:
-          DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      - name: Authenticate Supabase
         run: |
-          pg_dump \
-            --host="$SUPABASE_IPV4" \
-            --port=5432 \
-            --username=postgres \
-            --dbname=postgres \
-            --sslmode=require \
-            --format=custom \
-            --no-owner \
-            --no-privileges \
-            --verbose \
-            > supabase_backup.dump
+          supabase login --token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
 
-      - name: Upload backup artifact
+      - name: Backup Supabase database
+        run: |
+          supabase db dump \
+            --project-id ${{ secrets.SUPABASE_PROJECT_ID }} \
+            --file supabase_backup.sql
+
+      - name: Upload backup
         uses: actions/upload-artifact@v4
         with:
           name: supabase-weekly-backup
-          path: supabase_backup.dump
+          path: supabase_backup.sql
