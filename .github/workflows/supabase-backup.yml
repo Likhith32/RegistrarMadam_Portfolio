@@ -2,7 +2,7 @@ name: Supabase Weekly Backup
 
 on:
   schedule:
-    - cron: "0 4 * * 1"   # Monday 04:00 UTC
+    - cron: "0 4 * * 1"   # Every Monday at 04:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -11,22 +11,24 @@ jobs:
 
     steps:
       - name: Install PostgreSQL client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
 
-      - name: Create database backup
+      - name: Create database backup (IPv4 + SSL forced)
         env:
           DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
-          pg_dump "$DATABASE_URL" \
+          echo "Starting Supabase backup..."
+          pg_dump "${DATABASE_URL}?sslmode=require&hostaddr=0.0.0.0" \
             --format=custom \
             --no-owner \
             --no-privileges \
             --verbose \
             > supabase_backup.dump
 
-      - name: Upload backup
+      - name: Upload backup artifact
         uses: actions/upload-artifact@v4
         with:
           name: supabase-weekly-backup
           path: supabase_backup.dump
-
