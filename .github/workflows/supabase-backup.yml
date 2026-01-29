@@ -2,7 +2,7 @@ name: Supabase Weekly Backup
 
 on:
   schedule:
-    - cron: "0 4 * * 1"   # Every Monday at 04:00 UTC
+    - cron: "0 4 * * 1"   # Monday 04:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -13,14 +13,25 @@ jobs:
       - name: Install PostgreSQL client
         run: |
           sudo apt-get update
-          sudo apt-get install -y postgresql-client
+          sudo apt-get install -y postgresql-client dnsutils
 
-      - name: Create database backup (IPv4 + SSL forced)
-        env:
-          DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
+      - name: Resolve Supabase IPv4
+        id: resolve
         run: |
-          echo "Starting Supabase backup..."
-          pg_dump "${DATABASE_URL}?sslmode=require&hostaddr=0.0.0.0" \
+          IPV4=$(getent ahostsv4 db.zkiqeyhmoipzqawqqrvv.supabase.co | awk '{print $1; exit}')
+          echo "SUPABASE_IPV4=$IPV4" >> $GITHUB_ENV
+          echo "Resolved IPv4: $IPV4"
+
+      - name: Create database backup (IPv4 + SSL)
+        env:
+          DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          pg_dump \
+            --host="$SUPABASE_IPV4" \
+            --port=5432 \
+            --username=postgres \
+            --dbname=postgres \
+            --sslmode=require \
             --format=custom \
             --no-owner \
             --no-privileges \
