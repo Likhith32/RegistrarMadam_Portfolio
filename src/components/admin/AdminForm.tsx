@@ -1,0 +1,853 @@
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, AlertCircle, CheckCircle2, Upload, Image as ImageIcon } from "lucide-react";
+
+export type AdminField = {
+  name: string;
+  label: string;
+  type: "text" | "textarea" | "date" | "email" | "number" | "image";
+  required?: boolean;
+  pattern?: string;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  placeholder?: string;
+  accept?: string;
+};
+
+interface AdminFormProps {
+  fields: AdminField[];
+  initialData?: Record<string, any>;
+  onSubmit: (data: Record<string, any>) => Promise<void>;
+  onCancel: () => void;
+  submitLabel?: string;
+  isModal?: boolean;
+  modalTitle?: string;
+}
+
+export default function AdminForm({
+  fields,
+  initialData = {},
+  onSubmit,
+  onCancel,
+  submitLabel = "Save",
+  isModal = false,
+  modalTitle = "Form",
+}: AdminFormProps) {
+  // ✅ Memoize initial data to prevent unnecessary re-renders
+  const stableInitialData = useMemo(() => initialData, [JSON.stringify(initialData)]);
+  
+  const [formData, setFormData] = useState<Record<string, any>>(stableInitialData);
+  const [loading, setLoading] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [imagePreview, setImagePreview] = useState<Record<string, string>>({});
+
+  // ✅ Initialize image previews from initial data
+  const initialPreviews = useMemo(() => {
+    const previews: Record<string, string> = {};
+    fields.forEach((field) => {
+      if (field.type === "image" && stableInitialData[field.name]) {
+        if (typeof stableInitialData[field.name] === "string") {
+          previews[field.name] = stableInitialData[field.name];
+        }
+      }
+    });
+    return previews;
+  }, [stableInitialData, fields]);
+
+  // ✅ Only reset when stableInitialData changes
+  useEffect(() => {
+    console.log("🔄 Form initializing");
+    setFormData(stableInitialData);
+    setErrors({});
+    setTouched({});
+    setShowSuccess(false);
+    setImagePreview(initialPreviews);
+  }, [stableInitialData, initialPreviews]);
+
+  const validateField = (field: AdminField, value: any): string => {
+    if (field.type === "image") {
+      if (field.required) {
+        const hasFile = value instanceof File;
+        const hasUrl = typeof value === "string" && value.length > 0;
+        const hasInitialUrl = typeof stableInitialData[field.name] === "string" && 
+                             stableInitialData[field.name].length > 0;
+        
+        if (!hasFile && !hasUrl && !hasInitialUrl) {
+          return `${field.label} is required`;
+        }
+      }
+      return "";
+    }
+
+    if (field.required && (!value || value.toString().trim() === "")) {
+      return `${field.label} is required`;
+    }
+
+    if (field.type === "email" && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        return "Please enter a valid email address";
+      }
+    }
+
+    if (field.minLength && value && value.length < field.minLength) {
+      return `${field.label} must be at least ${field.minLength} characters`;
+    }
+
+    if (field.maxLength && value && value.length > field.maxLength) {
+      return `${field.label} must not exceed ${field.maxLength} characters`;
+    }
+
+    if (field.min !== undefined && value && parseFloat(value) < field.min) {
+      return `${field.label} must be at least ${field.min}`;
+    }
+
+    if (field.max !== undefined && value && parseFloat(value) > field.max) {
+      return `${field.label} must not exceed ${field.max}`;
+    }
+
+    if (field.pattern && value) {
+      const regex = new RegExp(field.pattern);
+      if (!regex.test(value)) {
+        return `${field.label} format is invalid`;
+      }
+    }
+
+    return "";
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (touched[name]) {
+      const field = fields.find((f) => f.name === name);
+      if (field) {
+        const error = validateField(field, value);
+        setErrors((prev) => ({ ...prev, [name]: error }));
+      }
+    }
+  };
+
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string
+  ) => {
+    const file = e.target.files?.[0];
+    
+    if (file) {
+      console.log("📁 Selected:", file.name);
+      
+      setFormData((prev) => ({ ...prev, [fieldName]: file }));
+
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview((prev) => ({ ...prev, [fieldName]: previewUrl }));
+
+      const field = fields.find((f) => f.name === fieldName);
+      if (field) {
+        const error = validateField(field, file);
+        setErrors((prev) => ({ ...prev, [fieldName]: error }));
+      }
+      setTouched((prev) => ({ ...prev, [fieldName]: true }));
+    }
+  };
+
+  const handleBlur = (fieldName: string) => {
+    setFocusedField(null);
+    setTouched((prev) => ({ ...prev, [fieldName]: true }));
+
+    const field = fields.find((f) => f.name === fieldName);
+    if (field) {
+      const error = validateField(field, formData[fieldName]);
+      setErrors((prev) => ({ ...prev, [fieldName]: error }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newErrors: Record<string, string> = {};
+    const newTouched: Record<string, boolean> = {};
+
+    fields.forEach((field) => {
+      newTouched[field.name] = true;
+      const error = validateField(field, formData[field.name]);
+      if (error) {
+        newErrors[field.name] = error;
+      }
+    });
+
+    setTouched(newTouched);
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).some((key) => newErrors[key])) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await onSubmit(formData);
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        onCancel();
+      }, 1500);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  const hasValue = (fieldName: string) => {
+    const value = formData[fieldName];
+    if (value instanceof File) return true;
+    return value && value.toString().trim() !== "";
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+      className={isModal ? "modal-overlay" : ""}
+      onClick={isModal ? onCancel : undefined}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.15 }}
+        className={isModal ? "modal-wrapper" : "form-wrapper"}
+        onClick={(e) => isModal && e.stopPropagation()}
+      >
+        {isModal && (
+          <div className="modal-header">
+            <h2 className="modal-title">{modalTitle}</h2>
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onCancel}
+              className="modal-close"
+              type="button"
+            >
+              <X size={20} />
+            </motion.button>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="admin-form">
+          <div className="form-fields">
+            {fields.map((field, index) => (
+              <motion.div
+                key={field.name}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.02 }}
+                className="form-field"
+              >
+                <div className="input-wrapper">
+                  {field.type === "image" ? (
+                    <>
+                      <div className="image-upload-wrapper">
+                        <input
+                          type="file"
+                          id={field.name}
+                          name={field.name}
+                          accept={field.accept || "image/*"}
+                          onChange={(e) => handleFileChange(e, field.name)}
+                          className="image-input-hidden"
+                        />
+                        <label htmlFor={field.name} className="image-upload-label">
+                          {imagePreview[field.name] ? (
+                            <div className="image-preview-container">
+                              <img
+                                src={imagePreview[field.name]}
+                                alt="Preview"
+                                className="image-preview"
+                              />
+                              <div className="image-overlay">
+                                <Upload size={24} />
+                                <span>Change Image</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="image-upload-placeholder">
+                              <ImageIcon size={40} className="upload-icon" />
+                              <p className="upload-text">{field.label}</p>
+                              <p className="upload-hint">Click to upload</p>
+                            </div>
+                          )}
+                        </label>
+                      </div>
+                      {field.required && (
+                        <p className="field-label">
+                          {field.label}
+                          <span className="required"> *</span>
+                        </p>
+                      )}
+                    </>
+                  ) : field.type === "textarea" ? (
+                    <>
+                      <textarea
+                        name={field.name}
+                        value={formData[field.name] || ""}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField(field.name)}
+                        onBlur={() => handleBlur(field.name)}
+                        placeholder={field.placeholder || " "}
+                        rows={4}
+                        className={`form-textarea ${
+                          focusedField === field.name ? "focused" : ""
+                        } ${errors[field.name] && touched[field.name] ? "error" : ""} ${
+                          hasValue(field.name) && !errors[field.name] ? "valid" : ""
+                        }`}
+                      />
+                      <label className="floating-label">
+                        {field.label}
+                        {field.required && <span className="required"> *</span>}
+                      </label>
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        value={formData[field.name] || ""}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField(field.name)}
+                        onBlur={() => handleBlur(field.name)}
+                        placeholder={field.placeholder || " "}
+                        min={field.min}
+                        max={field.max}
+                        minLength={field.minLength}
+                        maxLength={field.maxLength}
+                        pattern={field.pattern}
+                        className={`form-input ${
+                          focusedField === field.name ? "focused" : ""
+                        } ${errors[field.name] && touched[field.name] ? "error" : ""} ${
+                          hasValue(field.name) && !errors[field.name] ? "valid" : ""
+                        }`}
+                      />
+                      <label className="floating-label">
+                        {field.label}
+                        {field.required && <span className="required"> *</span>}
+                      </label>
+                    </>
+                  )}
+
+                  {field.type !== "image" && (
+                    <AnimatePresence>
+                      {hasValue(field.name) && touched[field.name] && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          exit={{ scale: 0 }}
+                          className="validation-icon"
+                        >
+                          {errors[field.name] ? (
+                            <AlertCircle size={18} className="error-icon" />
+                          ) : (
+                            <CheckCircle2 size={18} className="success-icon" />
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
+
+                <AnimatePresence>
+                  {errors[field.name] && touched[field.name] && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="error-message"
+                    >
+                      <AlertCircle size={14} />
+                      {errors[field.name]}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="form-actions"
+          >
+            <motion.button
+              type="button"
+              onClick={onCancel}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="cancel-btn"
+              disabled={loading}
+            >
+              Cancel
+            </motion.button>
+
+            <motion.button
+              type="submit"
+              disabled={loading}
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
+              className={`submit-btn ${loading ? "loading" : ""}`}
+            >
+              {loading ? (
+                <>
+                  <span className="spinner" />
+                  Saving...
+                </>
+              ) : showSuccess ? (
+                <>
+                  <CheckCircle2 size={18} />
+                  Saved!
+                </>
+              ) : (
+                submitLabel
+              )}
+            </motion.button>
+          </motion.div>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export function useAdminFormModal() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return {
+    isOpen,
+    open: () => setIsOpen(true),
+    close: () => setIsOpen(false),
+    AdminFormModal: (props: Omit<AdminFormProps, "isModal">) =>
+      isOpen ? (
+        <AdminForm {...props} isModal onCancel={() => setIsOpen(false)} />
+      ) : null,
+  };
+}
+
+/* ===================== STYLES ===================== */
+const styles = `
+  .form-wrapper,
+  .modal-wrapper {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .modal-wrapper {
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6); /* Darker solid background - NO BLUR */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3b2f0b;
+    margin: 0;
+  }
+
+  .modal-close {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #3b2f0b;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .admin-form {
+    padding: 28px;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    padding: 16px 40px 16px 16px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.8);
+    outline: none;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #1f2937;
+    font-family: inherit;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: transparent;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: #f59e0b;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .form-input.error,
+  .form-textarea.error {
+    border-color: #ef4444;
+    background: rgba(254, 226, 226, 0.5);
+  }
+
+  .form-input.error:focus,
+  .form-textarea.error:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+  }
+
+  .form-input.valid,
+  .form-textarea.valid {
+    border-color: #10b981;
+  }
+
+  .image-upload-wrapper {
+    width: 100%;
+  }
+
+  .image-input-hidden {
+    display: none;
+  }
+
+  .image-upload-label {
+    display: block;
+    cursor: pointer;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px dashed rgba(245, 158, 11, 0.5);
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .image-upload-label:hover {
+    border-color: #f59e0b;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+  }
+
+  .image-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .upload-icon {
+    color: #f59e0b;
+    margin-bottom: 12px;
+  }
+
+  .upload-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #3b2f0b;
+    margin: 0 0 4px 0;
+  }
+
+  .upload-hint {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .image-preview-container {
+    position: relative;
+    width: 100%;
+    height: 250px;
+  }
+
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #f3f4f6;
+  }
+
+  .image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+    font-weight: 600;
+  }
+
+  .image-upload-label:hover .image-overlay {
+    opacity: 1;
+  }
+
+  .field-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3b2f0b;
+    margin-top: 8px;
+  }
+
+  .floating-label {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    padding: 0 4px;
+  }
+
+  .form-input:focus ~ .floating-label,
+  .form-input:not(:placeholder-shown) ~ .floating-label,
+  .form-textarea:focus ~ .floating-label,
+  .form-textarea:not(:placeholder-shown) ~ .floating-label {
+    top: -10px;
+    left: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #f59e0b;
+    background: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.95) 50%);
+  }
+
+  .form-input.error ~ .floating-label,
+  .form-textarea.error ~ .floating-label {
+    color: #ef4444;
+  }
+
+  .form-input.valid ~ .floating-label,
+  .form-textarea.valid ~ .floating-label {
+    color: #10b981;
+  }
+
+  .required {
+    color: #ef4444;
+    font-weight: 700;
+  }
+
+  .validation-icon {
+    position: absolute;
+    right: 14px;
+    top: 16px;
+    pointer-events: none;
+  }
+
+  .error-icon {
+    color: #ef4444;
+  }
+
+  .success-icon {
+    color: #10b981;
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #ef4444;
+    font-weight: 500;
+    padding: 4px 8px;
+    background: rgba(254, 226, 226, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+  }
+
+  .cancel-btn {
+    background: rgba(255, 255, 255, 0.7);
+    color: #3b2f0b;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .cancel-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .cancel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, #fde047, #f59e0b);
+    color: #3b2f0b;
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+    min-width: 120px;
+  }
+
+  .submit-btn:hover:not(.loading) {
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .submit-btn.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(59, 47, 11, 0.3);
+    border-top-color: #3b2f0b;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 640px) {
+    .modal-wrapper,
+    .form-wrapper {
+      border-radius: 16px;
+      max-width: 100%;
+    }
+
+    .admin-form {
+      padding: 20px;
+    }
+
+    .modal-header {
+      padding: 20px 20px 12px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+    }
+
+    .form-actions {
+      flex-direction: column-reverse;
+    }
+
+    .cancel-btn,
+    .submit-btn {
+      width: 100%;
+    }
+
+    .image-preview-container {
+      height: 200px;
+    }
+  }
+`;
+
+if (typeof document !== 'undefined') {
+  const styleId = 'admin-form-styles';
+  if (!document.getElementById(styleId)) {
+    const styleTag = document.createElement('style');
+    styleTag.id = styleId;
+    styleTag.textContent = styles;
+    document.head.appendChild(styleTag);
+  }
+}

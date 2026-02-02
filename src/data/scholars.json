@@ -1,0 +1,65 @@
+[
+  {
+    "name": "RVS Lalitha",
+    "roll": "09022P0544",
+    "title": "Vehicular Ad Hoc Networks: Pile ups in Data Dissemination",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2017",
+    "month": "March",
+    "type": "phd"
+  },
+  {
+    "name": "P. Aruna Kumari",
+    "roll": "3022P0506",
+    "title": "Design and Development of Efficient Feature Selection Mechanisms at Feature Level in Multimodal Biometric System for Person Identification",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2020",
+    "month": "November",
+    "type": "phd"
+  },
+  {
+    "name": "S. Sureka",
+    "roll": "13022P0507",
+    "title": "A Machine Learning Framework for Early Risk Prediction of Diabetes Comorbidity in Thyroid Patients",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2021",
+    "month": "July",
+    "type": "phd"
+  },
+  {
+    "name": "N. Jayalakshmi",
+    "roll": "13022P0604",
+    "title": "An Interesting Subgraph Mining Approach to Design a Web Page Recommendation System using Web Log Data",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2021",
+    "month": "October",
+    "awarded_date": "2021-10-18",
+    "type": "phd"
+  },
+  {
+    "name": "Kovvuri N. Bhargavi",
+    "roll": "15022P0516",
+    "title": "A Framework for Decision Making in Weather Prediction Using Artificial Intelligence",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2023",
+    "month": "July",
+    "awarded_date": "2023-07-17",
+    "type": "phd"
+  },
+  {
+    "name": "Gorli L. Aruna Kumari",
+    "roll": "13022P0605",
+    "title": "Design and Analysis of an Improved Diabetes Mellitus Prediction Using Deep Neural Network",
+    "dept": "CSE",
+    "university": "JNTUK, Kakinada",
+    "year": "2023",
+    "month": "July",
+    "awarded_date": "2023-07-26",
+    "type": "phd"
+  }
+]

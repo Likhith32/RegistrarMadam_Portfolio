@@ -1,0 +1,92 @@
+[
+  {
+    "id": "3fc15e76-2c19-4ee5-b626-47a0cdd8faa9",
+    "title": "AI & Deep Learning",
+    "organizer": "APSSDC & 360DigiTMG",
+    "duration": "One Month",
+    "year": 2020,
+    "description": "Faculty development programme on Artificial Intelligence & Deep Learning held from July 1st to July 28th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "4dd120cb-22f5-44b1-9afc-9775446d284b",
+    "title": "AWS Cloud Computing",
+    "organizer": "APSSDC",
+    "duration": "5 Days",
+    "year": 2020,
+    "description": "Faculty development programme held from June 22nd to June 26th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "5da8127f-680b-4154-8cbf-38b1501f8c43",
+    "title": "GIS & Remote Sensing",
+    "organizer": "AICTE ATAL Academy",
+    "duration": "5 Days",
+    "year": 2021,
+    "description": "AICTE Training and Learning (ATAL) Academy online FDP held from Jan 4th to Jan 8th, 2021.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "6c30777a-3c58-4991-a8bb-54bf1bd211a9",
+    "title": "Data Science Applied to Industries",
+    "organizer": "JNTUK & Deepsphere.ai",
+    "duration": "One Week",
+    "year": 2020,
+    "description": "Global online faculty development programme held from Aug 17th to Aug 21st, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "7c3f9782-232b-4e40-9a52-e126fc663bdb",
+    "title": "Data Science",
+    "organizer": "ExcelR",
+    "duration": "One Month",
+    "year": 2020,
+    "description": "Faculty development programme on Data Science conducted from June 1st to June 30th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "ab32ccef-4108-4eef-9de3-a3e2a44ebf62",
+    "title": "Applied Machine Learning & Deep Learning",
+    "organizer": "APSSDC",
+    "duration": "6 Days",
+    "year": 2020,
+    "description": "Faculty development programme held from June 15th to June 20th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "b407ddce-313a-4099-b83c-c07804eada27",
+    "title": "Cyber Security",
+    "organizer": "JNTUK-UCEV",
+    "duration": "5 Days",
+    "year": 2020,
+    "description": "Faculty development programme held from 28th May to 1st June 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "ba8d423e-b328-462a-a8f2-82e3c20cd7f3",
+    "title": "Advanced Python for Enterprise Applications",
+    "organizer": "Directorate of FDC, JNTUK & Rossum Computing",
+    "duration": "6 Days",
+    "year": 2020,
+    "description": "Online FDP held from June 10th to June 15th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "e6ea7d79-0e77-427b-bc77-10e17b1e4084",
+    "title": "Blockchain & Cyber Security",
+    "organizer": "Andhra University College of Engineering (A), ISEA–MEITY, Govt. of India",
+    "duration": "One Week",
+    "year": 2020,
+    "description": "Faculty development programme on \"Block chain & Cyber security: A Unique fusion to untangle present day cyber security challenges\" held from 22nd–26th June 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  },
+  {
+    "id": "f37ba459-15c7-48a0-b119-1210ee9cfe9c",
+    "title": "Artificial Intelligence",
+    "organizer": "Dept. of IT, Vignana Institute of Engg for Women, NYCI & Brain O Vision",
+    "duration": "5 Days",
+    "year": 2020,
+    "description": "National Level Online FDP held from May 22nd to May 26th, 2020.",
+    "created_at": "2025-12-26 08:29:15.444964+00"
+  }
+]

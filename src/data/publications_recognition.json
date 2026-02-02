@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1ace88a0-6a91-4473-9476-b6f864e443ef",
+    "title": "Patent Published – Hand Gesture Recognition in Sign Language",
+    "description": "Recognition of Hand Gesture Images in Sign Language Using CNN. Application No: 202341005841A.",
+    "year": 2023,
+    "issued_by": "Indian Patent Office",
+    "created_at": "2025-12-30 17:27:13.999217+00"
+  },
+  {
+    "id": "28ee7e61-9e48-462d-97b8-f88ff82c4604",
+    "title": "Patent Published – Multi-Modal Personal Authentication Framework",
+    "description": "Framework using Fractional Cuckoo Search Feature Reduction. Application No: 202241025445A.",
+    "year": 2022,
+    "issued_by": "Indian Patent Office",
+    "created_at": "2025-12-30 17:27:13.999217+00"
+  },
+  {
+    "id": "39314101-d31c-4526-a497-5e84d7202d66",
+    "title": "Patent Granted – Medical Digital Pad with Patient Details",
+    "description": "Design Registration No. 401241-001 dated 02/12/2023.",
+    "year": 2023,
+    "issued_by": "Indian Patent Office",
+    "created_at": "2025-12-30 17:27:13.999217+00"
+  },
+  {
+    "id": "44e7e68b-e671-4d33-a3cf-370433bc72b7",
+    "title": "PhD Awarded – Kovvuri N. Bhargavi",
+    "description": "A Framework for Decision Making in Weather Prediction Using Artificial Intelligence. Awarded on 17 July 2023.",
+    "year": 2023,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  },
+  {
+    "id": "60d757b9-e67d-4d32-a52a-7b40800c1a70",
+    "title": "PhD Awarded – R.V.S. Lalitha",
+    "description": "Vehicular Ad Hoc Networks: Pile ups in Data Dissemination. Roll No: 09022P0544. Dept. of CSE, JNTUK, Kakinada.",
+    "year": 2017,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  },
+  {
+    "id": "971ff42d-4874-48c1-ac06-2e384735a752",
+    "title": "PhD Awarded – S. Sureka",
+    "description": "A Machine Learning Framework for Early Risk Prediction of Diabetes Comorbidity in Thyroid Patients. Roll No: 13022P0507.",
+    "year": 2021,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  },
+  {
+    "id": "9cd419d9-5a41-46de-a6bc-aa81a7e418b0",
+    "title": "Patent Published – Personal Authentication using Fractional Cuckoo Search",
+    "description": "Personal Authentication System using Fractional Cuckoo Search.",
+    "year": 2022,
+    "issued_by": "Indian Patent Office",
+    "created_at": "2025-12-30 17:27:13.999217+00"
+  },
+  {
+    "id": "a24a9fc4-325c-4ba9-8757-9f4eb4078498",
+    "title": "PhD Awarded – Gorli L. Aruna Kumari",
+    "description": "Design and Analysis of an Improved Diabetes Mellitus Prediction Using Deep Neural Network. Awarded on 26 July 2023.",
+    "year": 2023,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  },
+  {
+    "id": "eb29824b-49c7-4c4e-b754-b33e6b507e73",
+    "title": "PhD Awarded – N. Jayalakshmi",
+    "description": "An Interesting Subgraph Mining Approach to Design a Web Page Recommendation System using Web Log Data. Awarded on 18 Oct 2021.",
+    "year": 2021,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  },
+  {
+    "id": "ec63e2dc-45a3-48d6-8367-3470f287ccb1",
+    "title": "PhD Awarded – P. Aruna Kumari",
+    "description": "Design and Development of Efficient Feature Selection Mechanisms at Feature Level in Multimodal Biometric Systems. Roll No: 3022P0506.",
+    "year": 2020,
+    "issued_by": "JNTUK, Kakinada",
+    "created_at": "2025-12-30 17:26:57.942288+00"
+  }
+]
