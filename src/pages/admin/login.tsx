@@ -5,12 +5,17 @@ import { supabase } from "@/lib/supabase";
 export default function AdminLogin() {
   const navigate = useNavigate();
   const navigatedRef = useRef(false);
-  const [checking, setChecking] = useState(true);
 
+  const [checking, setChecking] = useState(true);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  // ✅ ENV-AWARE redirect URL (FIXED 🔥)
+  const redirectUrl = import.meta.env.PROD
+    ? "https://jayasumaofficial.vercel.app/admin/login"
+    : "http://localhost:8081/admin/login";
 
   // ✅ 1. Check existing session ONCE on mount
   useEffect(() => {
@@ -29,7 +34,7 @@ export default function AdminLogin() {
     checkSession();
   }, [navigate]);
 
-  // ✅ 2. Listen ONLY for real sign-in events
+  // ✅ 2. Listen ONLY for real SIGNED_IN events
   useEffect(() => {
     const {
       data: { subscription },
@@ -57,7 +62,7 @@ export default function AdminLogin() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: "http://localhost:8081/admin/login",
+        emailRedirectTo: redirectUrl,
       },
     });
 
@@ -70,7 +75,7 @@ export default function AdminLogin() {
     setLoading(false);
   };
 
-  // 🔄 Loading while session is being checked
+  // 🔄 Loading spinner while session is being checked
   if (checking) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -112,3 +117,4 @@ export default function AdminLogin() {
     </div>
   );
 }
+
