@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Newspaper } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 
 import {
   Award,
@@ -86,6 +87,13 @@ const sections = [
   icon: GraduationCap,
   color: "text-emerald-600",
   bgGradient: "from-emerald-400/20 to-teal-400/20",
+  count: null,
+}, {
+  title: "Daily Activities",
+  path: "/admin/daily-activities",
+  icon: ClipboardList,
+  color: "text-cyan-600",
+  bgGradient: "from-cyan-400/20 to-blue-400/20",
   count: null,
 }
 ];
