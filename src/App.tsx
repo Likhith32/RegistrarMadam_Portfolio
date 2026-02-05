@@ -17,6 +17,7 @@ import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 import LearningSymposiumPage from "@/pages/LearningSymposiumPage";
 import ScholarsPage from "@/pages/ScholarsPage";
+
 // ================= ADMIN COMPONENTS =================
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import AuthCallback from "@/components/auth/AuthCallback";
@@ -31,8 +32,9 @@ import JournalsAdmin from "./pages/admin/journals";
 import InvitedTalksAdmin from "./pages/admin/invited-talks";
 import WorkshopsAttendedAdmin from "./pages/admin/workshops-attended";
 import WorkshopsOrganizedAdmin from "./pages/admin/workshops-organized";
-import AdminMedia from "./pages/admin/media"; // ✅ CORRECT IMPORT
+import AdminMedia from "./pages/admin/media";
 import ScholarsAdmin from "./pages/admin/Scholars";
+import DailyActivitiesAdmin from "./pages/admin/daily-activities";
 
 const queryClient = new QueryClient();
 
@@ -55,31 +57,30 @@ export default function App() {
             <Route path="/education" element={<EducationPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/scholars" element={<ScholarsPage />} />
+            <Route path="/learning-symposium" element={<LearningSymposiumPage />} />
 
-<Route path="/learning-symposium" element={<LearningSymposiumPage />} />
-            {/* ================= ADMIN LOGIN ================= */}
+            {/* ================= ADMIN AUTH ================= */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/auth/callback" element={<AuthCallback />} />
 
             {/* ================= ADMIN PROTECTED ROUTES ================= */}
-           <Route path="/admin" element={<ProtectedRoute />}>
-  <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="/admin" element={<ProtectedRoute />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
 
-  <Route path="dashboard" element={<AdminDashboard />} />
-  <Route path="major-awards" element={<MajorAwardsAdmin />} />
-  <Route path="academic-governance" element={<AcademicGovernanceAdmin />} />
-  <Route path="committee-roles" element={<CommitteeRolesAdmin />} />
-  <Route path="journals" element={<JournalsAdmin />} />
-  <Route path="invited-talks" element={<InvitedTalksAdmin />} />
-  <Route path="workshops-attended" element={<WorkshopsAttendedAdmin />} />
-  <Route path="workshops-organized" element={<WorkshopsOrganizedAdmin />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="major-awards" element={<MajorAwardsAdmin />} />
+              <Route path="academic-governance" element={<AcademicGovernanceAdmin />} />
+              <Route path="committee-roles" element={<CommitteeRolesAdmin />} />
+              <Route path="journals" element={<JournalsAdmin />} />
+              <Route path="invited-talks" element={<InvitedTalksAdmin />} />
+              <Route path="workshops-attended" element={<WorkshopsAttendedAdmin />} />
+              <Route path="workshops-organized" element={<WorkshopsOrganizedAdmin />} />
+              <Route path="media" element={<AdminMedia />} />
+              <Route path="scholars" element={<ScholarsAdmin />} />
 
-  {/* ✅ SCHOLARS CRUD */}
-  <Route path="scholars" element={<ScholarsAdmin />} />
-
-  <Route path="media" element={<AdminMedia />} />
-</Route>
-
+              {/* ✅ DAILY ACTIVITIES */}
+              <Route path="daily-activities" element={<DailyActivitiesAdmin />} />
+            </Route>
 
             {/* ================= FALLBACK ================= */}
             <Route path="*" element={<NotFound />} />

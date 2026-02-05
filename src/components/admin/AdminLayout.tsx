@@ -1,9 +1,10 @@
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { Newspaper } from "lucide-react";
 import { GraduationCap } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import {
   Home,
   Award,
@@ -31,25 +32,16 @@ const navItems = [
   { label: "Workshops-organized", to: "/admin/workshops-organized", icon: Calendar },
   { label: "Media", to: "/admin/media", icon: Newspaper },
   { label: "Scholars", to: "/admin/scholars", icon: GraduationCap },
+  { label: "Daily Activities", to: "/admin/daily-activities", icon: ClipboardList },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState("/admin/dashboard");
-
-  useEffect(() => {
-    setActiveItem(window.location.pathname);
-  }, []);
 
   const logout = async () => {
     await supabase.auth.signOut();
     navigate("/admin/login");
-  };
-
-  const handleNavClick = (to: string) => {
-    setActiveItem(to);
-    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -105,8 +97,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   >
                     <NavLink
                       to={item.to}
-                      onClick={() => handleNavClick(item.to)}
-                      className={`nav-item ${activeItem === item.to ? "active" : ""}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `nav-item ${isActive ? "active" : ""}`
+                      }
                     >
                       <item.icon size={20} />
                       <span>{item.label}</span>
@@ -167,8 +161,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             >
               <NavLink
                 to={item.to}
-                onClick={() => setActiveItem(item.to)}
-                className={`nav-item ${activeItem === item.to ? "active" : ""}`}
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? "active" : ""}`
+                }
               >
                 <motion.div
                   whileHover={{ scale: 1.1, rotate: 5 }}
