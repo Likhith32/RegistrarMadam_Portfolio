@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import PropTypes from "prop-types";
 
 const containerVariants = {
   open: {
@@ -23,12 +24,17 @@ const MultiYearCard = ({
   description,
   years,
   badge,
+  certificate_image_url,
 }) => {
   const [open, setOpen] = useState(false);
   const cardRef = useRef(null);
   const hasYears = Array.isArray(years) && years.length > 0;
   const hasMultipleYears = Array.isArray(years) && years.length > 1;
   const singleYear = hasYears && !hasMultipleYears ? years[0] : null;
+
+  // Placeholder image path
+  const placeholderImage = "/images/award-placeholder.png";
+  const imageSrc = certificate_image_url || placeholderImage;
 
   // Auto-scroll to expanded card on mobile
   useEffect(() => {
@@ -67,6 +73,20 @@ const MultiYearCard = ({
           : "shadow-sm"
       )}
     >
+      {/* CERTIFICATE IMAGE - Displayed at the top */}
+      {certificate_image_url ? (
+        <img
+          src={certificate_image_url}
+          alt={`${title} certificate`}
+          className="w-full h-40 object-contain rounded-lg mb-4 border bg-muted"
+          loading="lazy"
+        />
+      ) : (
+        <div className="h-40 flex items-center justify-center bg-muted rounded-lg mb-4 text-sm text-muted-foreground border border-dashed">
+          Certificate will be updated soon
+        </div>
+      )}
+
       {/* HEADER */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
@@ -176,6 +196,15 @@ const MultiYearCard = ({
       </AnimatePresence>
     </motion.div>
   );
+};
+
+MultiYearCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  institution: PropTypes.string,
+  description: PropTypes.string,
+  years: PropTypes.arrayOf(PropTypes.string),
+  badge: PropTypes.string,
+  certificate_image_url: PropTypes.string,
 };
 
 export default MultiYearCard;

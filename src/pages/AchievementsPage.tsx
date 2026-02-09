@@ -18,6 +18,7 @@ interface AchievementItem {
   institution: string;
   description: string;
   years: string[];
+  certificate_image_url?: string | null;
   created_at?: string;
 }
 
@@ -52,6 +53,7 @@ const AchievementsPage = () => {
       institution: item.institution,
       description: item.description || "",
       years: parseYears(item.years),
+      certificate_image_url: item.certificate_image_url ?? null,
       created_at: item.created_at,
     }));
   };
